@@ -1,0 +1,117 @@
+<head>
+	<title>Stat page for CrossCloud</title>
+
+	<link href="https://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+
+
+    <style type="text/css">
+        .h-divider{
+             margin-top:5px;
+             margin-bottom:5px;
+             height:1px;
+             width:100%;
+             border-top:1px solid gray;
+        }
+        #toTop{
+            display: block;
+            width: 50px;
+            height: 50px;
+            position: fixed;
+            background: #ADD8E6;
+            bottom: 20px;
+            right: 20px;
+            border-radius: 35px;
+        }
+        .glyphicon {
+            color: #000000;
+            font-size: 50px;
+        }
+    </style>
+</head>
+
+<body class="body">
+
+    <script>
+        $(document).ready(function(){
+
+            // Hide the toTop button when the page loads.
+            $("#toTop").css("display", "none");
+
+            $(window).scroll(function(){
+                if($(window).scrollTop() > 300){
+                    console.log("is more");
+                    $("#toTop").fadeIn("slow");
+                }
+                else {
+                     // If it's less than 0 (at the top), hide the toTop button.
+                     console.log("is less");
+                     $("#toTop").fadeOut("slow");
+                }
+            });
+
+            $("#toTop").click(function(){
+                event.preventDefault();
+                $("html, body").animate({
+                     scrollTop:0
+                     },"slow");
+            });
+
+        });
+ </script>
+    <div id="index" class="col-md-12" align="center">
+        <h1>Index</h1>
+        <h3><a href="#channel_activity data">User activity data by channel</a></h3><br>
+        <h3><a href="#weekly_user_variation">Weekly user gain/loss</a></h3><br>
+        <h3><a href="#weekly_user_count">Weekly user count</a></h3><br>
+        <h3><a href="#monthly_user_count">Monthly user count</a></h3><br>
+        <h3><a href="#current_versions_in_use">Version usage</a></h3><br>
+    </div>
+    <div class="col-xs-12" style="height:50px;"></div>
+    <div id="channel_activity data" class="col-md-12" align="center">
+         <div class="h-divider"></div>
+        <h1>User activity data by channel</h1>
+        <embed  type="image/svg+xml" src={{channel_activity_data|safe}} style='max-width:65%'/>
+    </div>
+    <div class="col-xs-12" style="height:50px;"></div>
+    <div id="weekly_user_variation" class="col-md-12" align="center">
+        <h1>Weekly user gain/loss</h1>
+        <embed type="image/svg+xml" src={{weekly_user_variation|safe}} style='max-width:65%'/>
+    </div>
+    <div class="col-xs-12" style="height:50px;"></div>
+    <div id="weekly_user_count" class="col-md-12" align="center">
+        <h1>Weekly user count</h1>
+        <embed type="image/svg+xml" src={{weekly_user_count|safe}} style='max-width:65%'/>
+    </div>
+    <div class="col-xs-12" style="height:50px;"></div>
+    <div id="monthly_user_count" class="col-md-12" align="center">
+        <h1>Monthly user count</h1>
+        <embed type="image/svg+xml" src={{monthly_user_count|safe}} style='max-width:65%'/>
+    </div>
+    <div class="col-xs-12" style="height:50px;"></div>
+    <div id="current_versions_in_use" class="col-md-12" align="center">
+        <h1>Version usage for
+            <form method="GET">
+                <select name ="date range" onchange="this.form.submit()" value="last week">
+                    <option value="today" {% if request.args.get('date range')=='today' %} selected="selected"{% endif %} >Today</option>
+                    <option value="current week" {% if request.args.get('date range')=='current week' %} selected="selected"{% endif %} >Current week</option>
+                    <option value="last week" {% if request.args.get('date range')=='last week' %} selected="selected"{% endif %} >Last week</option>
+                    <option value="current month" {% if request.args.get('date range')=='current month' %} selected="selected"{% endif %} >Current month</option>
+                    <option value="last month" {% if request.args.get('date range')=='last month' %} selected="selected"{% endif %}>Last month</option>
+                </select>
+                <input type="hidden" name="days" value={{request.args.get('days', 30)}} />
+                <input type="hidden" name="weeks" value={{request.args.get('weeks', 4)}} />
+                <input type="hidden" name="months" value={{request.args.get('months', 4)}} />
+                <input type="hidden" name="filter" value={{request.args.get('filter', 'version')}} />
+
+            </form>
+        </h1>
+        <embed type="image/svg+xml" src={{current_versions_in_use|safe}} style='max-width:65%'/>
+    </div>
+
+
+    <a href="#" id="toTop">
+        <span  class="glyphicon glyphicon-menu-up"></span>
+    </a>
+
+</body>
